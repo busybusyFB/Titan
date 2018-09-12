@@ -40,6 +40,7 @@ public class YelpAPI {
 		}
 		String query = String.format("term=%s&latitude=%s&longitude=%s&limit=%s", term, lat, lon, SEARCH_LIMIT);
 		String url = HOST + ENDPOINT + "?" + query;
+		System.out.println(url);
 		try {
 			HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
 			
@@ -105,6 +106,7 @@ public class YelpAPI {
 	// Convert JSONArray to a list of item objects.
 	private List<Item> getItemList(JSONArray restaurants) throws JSONException {
 		List<Item> list = new ArrayList<>();
+		
 		for (int i = 0; i < restaurants.length(); i++) {
 			JSONObject restaurant = restaurants.getJSONObject(i);
 			ItemBuilder builder = new ItemBuilder();
@@ -128,9 +130,12 @@ public class YelpAPI {
 			}
 			builder.setAddress(getAddress(restaurant));
 			builder.setCategories(getCategories(restaurant));
+			
+			list.add(builder.build()); //forgot
 		}
 		return list;
 	}
+	
 	private Set<String> getCategories(JSONObject restaurant) throws JSONException {
 		Set<String> categories = new HashSet<>();
 		//class 6

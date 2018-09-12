@@ -14,6 +14,7 @@ import org.json.*;
 
 import entity.Item;
 import external.YelpAPI;
+import db.MySQLConnection;
 
 
 /**
@@ -60,18 +61,43 @@ public class SearchItem extends HttpServlet {
 //		out.close();
 		
 		//real code
+		//eg3
+//		double lat = Double.parseDouble(request.getParameter("lat"));
+//		double lon = Double.parseDouble(request.getParameter("lon"));
+//		String term = request.getParameter("term");
+//		
+//		YelpAPI yelpAPI = new YelpAPI();
+//		List<Item> items = yelpAPI.search(lat, lon, "");
+//		
+//		//DB operations
+//		
+//		JSONArray array = new JSONArray();
+//		for (Item item : items) {
+//			array.put(item.toJSONObject());
+//		}
+//		RpcHelper.writeJsonArray(response, array);
+		
 		double lat = Double.parseDouble(request.getParameter("lat"));
 		double lon = Double.parseDouble(request.getParameter("lon"));
-		YelpAPI yelpAPI = new YelpAPI();
-		List<Item> items = yelpAPI.search(lat, lon, "");
-		
-		//DB operations
-		
-		JSONArray array = new JSONArray();
-		for (Item item : items) {
-			array.put(item.toJSONObject());
+		String term = request.getParameter("term");
+		System.out.println(lat + " " + lon + " " + term);
+		MySQLConnection conn = new MySQLConnection();
+		try {
+			List<Item> items = conn.searchItems(lat, lon, term);
+			//for debug
+//			YelpAPI yelpAPI = new YelpAPI();
+//			List<Item> items = yelpAPI.search(lat, lon, term);
+			JSONArray array = new JSONArray();
+			for (Item item : items) {
+				array.put(item.toJSONObject());
+			}
+			RpcHelper.writeJsonArray(response, array);
+			} catch (Exception e) {
+				e.printStackTrace();
+		} finally {
+			conn.close(); // run no matter what
 		}
-		RpcHelper.writeJsonArray(response, array);
+		
 	}
 
 	/**
