@@ -16,24 +16,14 @@ import entity.Item;
 import external.YelpAPI;
 import db.MySQLConnection;
 
-
-/**
- * Servlet implementation class SearchItem
- */
 @WebServlet("/search")
 public class SearchItem extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
+
     public SearchItem() {
         super();
-        // TODO Auto-generated constructor stub
     }
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
+
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//eg1
 //		response.setContentType("application/json");
@@ -76,33 +66,36 @@ public class SearchItem extends HttpServlet {
 //			array.put(item.toJSONObject());
 //		}
 //		RpcHelper.writeJsonArray(response, array);
-		
+
 		double lat = Double.parseDouble(request.getParameter("lat"));
 		double lon = Double.parseDouble(request.getParameter("lon"));
 		String term = request.getParameter("term");
-		System.out.println(lat + " " + lon + " " + term);
+		String userId = request.getParameter("user_id");
+		System.out.println(userId + " " + lat + " " + lon + " " + term);
 		MySQLConnection conn = new MySQLConnection();
 		try {
 			List<Item> items = conn.searchItems(lat, lon, term);
-			//for debug
-//			YelpAPI yelpAPI = new YelpAPI();
-//			List<Item> items = yelpAPI.search(lat, lon, term);
+			Set<Item> favoriteItems = conn.getFavoriteItems(userId);
+			System.out.println("size is " + favoriteItems.size());
+			//for (Item item : favoriteItems) {
+				//System.out.println(item.getName());
+			//}
 			JSONArray array = new JSONArray();
 			for (Item item : items) {
-				array.put(item.toJSONObject());
+				JSONObject obj = item.toJSONObject();
+				if(favoriteItems.contains(item)) {
+					obj.append("favorite", true);
+				}
+				array.put(obj);
 			}
 			RpcHelper.writeJsonArray(response, array);
-			} catch (Exception e) {
+		} catch (Exception e) {
 				e.printStackTrace();
 		} finally {
 			conn.close(); // run no matter what
 		}
-		
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
