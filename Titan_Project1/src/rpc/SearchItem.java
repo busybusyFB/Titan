@@ -71,21 +71,15 @@ public class SearchItem extends HttpServlet {
 		double lon = Double.parseDouble(request.getParameter("lon"));
 		String term = request.getParameter("term");
 		String userId = request.getParameter("user_id");
-		System.out.println(userId + " " + lat + " " + lon + " " + term);
 		MySQLConnection conn = new MySQLConnection();
 		try {
 			List<Item> items = conn.searchItems(lat, lon, term);
-			Set<Item> favoriteItems = conn.getFavoriteItems(userId);
-			System.out.println("size is " + favoriteItems.size());
-			//for (Item item : favoriteItems) {
-				//System.out.println(item.getName());
-			//}
+			Set<String> favoriteItems = conn.getFavoriteItemIds(userId);
+
 			JSONArray array = new JSONArray();
 			for (Item item : items) {
 				JSONObject obj = item.toJSONObject();
-				if(favoriteItems.contains(item)) {
-					obj.append("favorite", true);
-				}
+				obj.put("favorite", favoriteItems.contains(item.getItemId()));
 				array.put(obj);
 			}
 			RpcHelper.writeJsonArray(response, array);
@@ -97,7 +91,6 @@ public class SearchItem extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 

@@ -72,96 +72,80 @@ public class MySQLConnection {
 		}		
 	}
 	
-
 	public Set<String> getFavoriteItemIds(String userId) {
-		Set<String> favoriteItems = new HashSet<>();
+		if (conn == null) {
+			return new HashSet<>();
+		}
+		Set<String> favoriteItemIds = new HashSet<>();
+		String sql = "SELECT item_id from history WHERE user_id = ?";
 		try {
-	    	String sql = "SELECT item_id from history WHERE user_id = ?";
-	    	PreparedStatement statement = conn.prepareStatement(sql);
-	    	statement.setString(1, userId);
-	    	ResultSet rs = statement.executeQuery();
+	    	PreparedStatement ps = conn.prepareStatement(sql);
+	    	ps.setString(1, userId);
+	    	ResultSet rs = ps.executeQuery();
 	    	while (rs.next()) {
-	    		String itemId = rs.getString("item_id");
-	    		favoriteItems.add(itemId);	
+	    		favoriteItemIds.add(rs.getString("item_id"));	
 	    	}
 	    } catch (SQLException e) {
 	    	e.printStackTrace();
 	    }
-	    return favoriteItems;
-	  }
+	    return favoriteItemIds;
+	}
 
-	  
-	  public Set<Item> getFavoriteItems(String userId) {
-		  System.out.println(userId);
-		  Set<String> itemIds = getFavoriteItemIds(userId);
+	public Set<Item> getFavoriteItems(String userId) {
+		if (conn == null) {
+			return new HashSet<>();
+		}
+		Set<String> itemIds = getFavoriteItemIds(userId);
 	    Set<Item> favoriteItems = new HashSet<>();
+	    
+	    
+	    String sql = "SELECT * from items WHERE item_id = ? ";
 	    try {
-
-	      for (String itemId : itemIds) {
-	        String sql = "SELECT * from items WHERE item_id = ? ";
-	        PreparedStatement statement = conn.prepareStatement(sql);
-	        statement.setString(1, itemId);
-	        ResultSet rs = statement.executeQuery();
-	        ItemBuilder builder = new ItemBuilder();
-
-	        // Because itemId is unique and given one item id there should
-	        // have
-	        // only one result returned.
-	        if (rs.next()) {
-	          builder.setItemId(rs.getString("item_id"));
-	          builder.setName(rs.getString("name"));
-//	          builder.setCity(rs.getString("city"));
-//	          builder.setState(rs.getString("state"));
-//	          builder.setCountry(rs.getString("country"));
-//	          builder.setZipcode(rs.getString("zipcode"));
-	          builder.setRating(rs.getDouble("rating"));
-	          builder.setAddress(rs.getString("address"));
-//	          builder.setLatitude(rs.getDouble("latitude"));
-//	          builder.setLongitude(rs.getDouble("longitude"));
-//	          builder.setDescription(rs.getString("description"));
-//	          builder.setSnippet(rs.getString("snippet"));
-//	          builder.setSnippetUrl(rs.getString("snippet_url"));
-	          builder.setImageUrl(rs.getString("image_url"));
-	          builder.setUrl(rs.getString("url"));
-	        }
-	        
-	        // Join categories information into builder.
-	        // But why we do not join in sql? Because it'll be difficult
-	        // to set it in builder.
-	        sql = "SELECT * from categories WHERE item_id = ?";
-	        statement = conn.prepareStatement(sql);
-	        statement.setString(1, itemId);
-	        rs = statement.executeQuery();
-	        Set<String> categories = new HashSet<>();
-	        while (rs.next()) {
-	          categories.add(rs.getString("category"));
-	        }
-	        builder.setCategories(categories);
-	        favoriteItems.add(builder.build());
-	      }
+	    	PreparedStatement ps = conn.prepareStatement(sql);
+	    	for (String itemId : itemIds) {
+	    		ps.setString(1, itemId);
+	    		//need to read data from DB
+	    		//ResultSet is also a table like item table;
+	    		ResultSet rs = ps.executeQuery();
+	    		//returned rs pointing to the -1th row of table
+	    		ItemBuilder builder = new ItemBuilder();
+	    		// Because itemId is unique and given one item id there should
+	    		// have only one result returned.
+	    		while (rs.next()) { // "if" is also fine, itemId only return one entry
+	    			builder.setItemId(rs.getString("item_id"));
+	    			builder.setName(rs.getString("name"));
+	    			builder.setRating(rs.getDouble("rating"));
+	    			builder.setAddress(rs.getString("address"));
+	    			builder.setImageUrl(rs.getString("image_url"));
+	    			builder.setUrl(rs.getString("url"));
+	    			builder.setDistance(rs.getDouble("distance"));
+	    			builder.setCategories(getCategories(itemId));
+	    			
+	    			favoriteItems.add(builder.build());
+	    		}
+	    	}
 	    } catch (SQLException e) {
 	      e.printStackTrace();
 	    }
 	    return favoriteItems;
-	  }
+	}
 
-	  public Set<String> getCategories(String itemId) {
-	    Set<String> categories = new HashSet<>();
+	public Set<String> getCategories(String itemId) {
+		Set<String> categories = new HashSet<>();
+		String sql = "SELECT category from categories WHERE item_id = ? ";
 	    try {
-	      String sql = "SELECT category from categories WHERE item_id = ? ";
-	      PreparedStatement statement = conn.prepareStatement(sql);
-	      statement.setString(1, itemId);
-	      ResultSet rs = statement.executeQuery();
-	      while (rs.next()) {
-	        categories.add(rs.getString("category"));
-	      }
+	    	PreparedStatement ps = conn.prepareStatement(sql);
+	    	ps.setString(1, itemId);
+	    	ResultSet rs = ps.executeQuery();
+	    	while (rs.next()) {
+	    		categories.add(rs.getString("category"));
+	    	}
 	    } catch (Exception e) {
-	      System.out.println(e.getMessage());
+	      e.printStackTrace();
 	    }
 	    return categories;
-	  }
-	  
-	  
+	}
+
 	public List<Item> searchItems(double lat, double lon, String term) {
 		YelpAPI yelpAPI = new YelpAPI();
 		List<Item> items = yelpAPI.search(lat, lon, term);
@@ -171,7 +155,7 @@ public class MySQLConnection {
 		return items;
 	}
 	
-	public void saveItem(Item item) { // save an restuarant item into DB
+	public void saveItem(Item item) { // save an restaurant item into DB
 		if (conn == null) {
 			System.err.println("DB connection failed");
 		}
@@ -201,7 +185,11 @@ public class MySQLConnection {
 	}
 	
 	public List<Item> searchItems(String userId, double lat, double lon, String category) {
-		List<Item> items = new ArrayList<>();
+		YelpAPI yelpAPI = new YelpAPI();
+		List<Item> items = yelpAPI.search(lat, lon, category);
+		for(Item item : items) {
+			saveItem(item);
+		}
 		return items;
 	}
 }

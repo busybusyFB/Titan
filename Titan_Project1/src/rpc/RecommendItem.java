@@ -19,9 +19,6 @@ import algorithm.GeoRecommendation;
 import db.MySQLConnection;
 import entity.Item;
 
-/**
- * Servlet implementation class RecommendItem
- */
 @WebServlet("/recommendation")
 public class RecommendItem extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -32,7 +29,7 @@ public class RecommendItem extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// test codes: eg1
-		response.setContentType("application/json");
+		//response.setContentType("application/json");
 //		
 //		JSONArray array = new JSONArray();
 //		try {
@@ -55,22 +52,22 @@ public class RecommendItem extends HttpServlet {
 //		}
 //		RpcHelper.writeJsonArray(response,array);
 		
+		System.out.println("recommendation");
 		String userId = request.getParameter("user_id");
 		double lat = Double.parseDouble(request.getParameter("lat"));
 		double lon = Double.parseDouble(request.getParameter("lon"));
 		GeoRecommendation recommendation = new GeoRecommendation();
-		List<Item> items = recommendation.recommendationItems(userId, lat, lon);
-		
-		JSONArray result = new JSONArray();
+		List<Item> items = recommendation.recommendItems(userId, lat, lon);
 
-	    try {
-	    	for (Item item : items) {
-	    		result.put(item.toJSONObject());
-	    	}
-	    } catch (Exception e) {
-	    	e.printStackTrace();
-	    }
-	    RpcHelper.writeJsonArray(response, result);
+		JSONArray result = new JSONArray();
+		try {
+			for (Item item : items) {
+				result.put(item.toJSONObject());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		RpcHelper.writeJsonArray(response, result);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

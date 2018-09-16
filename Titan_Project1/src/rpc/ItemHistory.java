@@ -27,10 +27,13 @@ public class ItemHistory extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String userId = request.getParameter("user_id");
+//		response.setContentType("application/json");
 		MySQLConnection conn = new MySQLConnection();
+		String userId = request.getParameter("user_id");
+		JSONArray array = new JSONArray();
+		
 	    Set<Item> items = conn.getFavoriteItems(userId);
-	    JSONArray array = new JSONArray();
+	    
 	    for (Item item : items) {
 	      JSONObject obj = item.toJSONObject();
 	      try {
