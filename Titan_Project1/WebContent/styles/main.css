@@ -36,8 +36,10 @@ ul {
 	border-radius: 50%;
 	color: #333C4D;
 	height: 40px;
-	margin-right: 20px;
+	margin-right: 5px;
+	margin-left: 5px;
 	padding-left: 9px;
+	padding-right:8px;
 	padding-top: 5px;
 	width: 40px;
 }

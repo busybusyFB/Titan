@@ -16,7 +16,9 @@ ul {
 	list-style: none;
 }
 
-/*top header*/
+/**
+ * top header
+ */
 .top-header {
 	align-items: center;
 	background: #DF574B;
@@ -34,13 +36,17 @@ ul {
 	border-radius: 50%;
 	color: #333C4D;
 	height: 40px;
-	margin-right: 20px;
+	margin-right: 5px;
+	margin-left: 5px;
 	padding-left: 9px;
+	padding-right:8px;
 	padding-top: 5px;
 	width: 40px;
 }
 
-/*top navigation*/
+/**
+ * top navigation
+ */
 .top-nav {
 	flex: 1;
 }
@@ -57,18 +63,22 @@ ul {
 	padding-right: 10px;
 }
 
-/*main container*/
+/**
+ * main container
+ */
 .container {
 	margin: 60px auto;
 	max-width: 1000px;
 	min-width: 600px;
 }
 
-/* main header */
+/**
+ * main header
+ */
 .container>header {
 	align-items: center;
 	background:
-		url('http://folkartcarsi.com/img/4.jpg')
+		url('http://prophoto.com.cy/wp-content/galleries/food/food-restaurant-photographer-cyprus-10.jpg')
 		no-repeat 50% 50%;
 	background-size: 100%;
 	display: flex;
@@ -88,12 +98,16 @@ ul {
 	color: #FBAF41;
 }
 
-/* main section */
+/**
+ * main section
+ */
 .main-section {
 	background: #F3BB43;
 }
 
-/* aside */
+/**
+ * aside
+ */
 #item-nav {
 	float: left;
 	width: 180px;
@@ -105,7 +119,9 @@ ul {
 	text-align: center;
 }
 
-/*main navigation*/
+/**
+ * main navigation
+ */
 .main-nav-btn {
 	background: none;
 	border-top: 1px solid #FFFFFF;
@@ -130,7 +146,9 @@ ul {
 	width: 20px;
 }
 
-/* item list */
+/**
+ * item list
+ */
 #item-list {
 	background: #F2EBD9;
 	color: #624630;
@@ -146,14 +164,16 @@ ul {
 	text-align: center;
 }
 
-/* item */
+/**
+ * item
+ */
 .item {
-  padding: 15px;
-  aling-items: center;
-  border-bottom: 1px solid #FFFFFF;
-  display: flex;
-  margin: 10px;
-  transition: background-color 1000ms liner;
+	align-items: center;
+	border-bottom: 1px solid #FFFFFF;
+	display: flex;
+	margin: 10px;
+	padding: 15px;
+	transition: background-color 100ms linear;
 }
 
 .item:last-child {
@@ -211,21 +231,23 @@ ul {
 	color: #F13F3F;
 }
 
-/* footer section */
+/**
+ * footer section
+ */
 footer {
-  height: 200px;
-  backgound: #434343;
-  position: relative;
-  font-size: 0.8em;
+	background: #434343;
+	font-size: 0.8em;
+	height: 200px;
+	position: relative;
 }
 
 footer p {
 	text-align: center;
-  padding: 5px;
 }
 
 footer p.title {
 	font-size: 1.2em;
+	padding: 15px;
 }
 
 footer ul {
