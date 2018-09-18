@@ -27,7 +27,6 @@ public class ItemHistory extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//		response.setContentType("application/json");
 		MySQLConnection conn = new MySQLConnection();
 		String userId = request.getParameter("user_id");
 		JSONArray array = new JSONArray();

@@ -73,8 +73,8 @@ public class MySQLTableCreation {
 			stmt.executeUpdate(sql);
 
 			
-			//Step 4: insert fake user 1111/3229c1097c00d497a0fd282d586be050
-			sql = "INSERT INTO users VALUES ('1111', 'weiweiwei', 'John', 'Smith')";
+			//Step 4: insert default user
+			sql = "INSERT INTO users VALUES ('New User', 'default', 'New User', 'New User')";
 			stmt.executeUpdate(sql);
 			
 			System.out.println("Import is done successfully.");

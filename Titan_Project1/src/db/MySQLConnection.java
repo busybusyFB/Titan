@@ -71,7 +71,7 @@ public class MySQLConnection {
 			e.printStackTrace();
 		}		
 	}
-	
+
 	public Set<String> getFavoriteItemIds(String userId) {
 		if (conn == null) {
 			return new HashSet<>();
@@ -191,5 +191,51 @@ public class MySQLConnection {
 			saveItem(item);
 		}
 		return items;
+	}
+	
+	public String getPassword(String user_id) {
+		if (conn == null) {
+			System.err.println("DB connection failed");
+			return null;
+		}
+		
+		String password = null;
+		try {
+			String sql = "SELECT password from users WHERE user_id = ? ";
+	    	PreparedStatement ps = conn.prepareStatement(sql);
+	    	ps.setString(1, user_id);
+	    	ResultSet rs = ps.executeQuery();
+	    	if (rs.next()) {
+	    		password = rs.getString("password");
+	    	}
+		} catch (Exception e) {
+			e.printStackTrace();			
+		}
+		return password;
+	}
+	
+	public boolean saveUser(String user_id, String pwd, String firstName, String lastName) {
+		if (conn == null) {
+			System.err.println("DB connection failed");
+			return false;
+		}
+		try {
+			String oldPwd = getPassword(user_id);
+			if (oldPwd != null) { //user_id already exists
+				return false;
+			} else {
+				String sql = "INSERT INTO users VALUES (?, ?, ?, ?)";
+		    	PreparedStatement ps = conn.prepareStatement(sql);
+		    	ps.setString(1, user_id);
+		    	ps.setString(2, pwd);
+		    	ps.setString(3, firstName);
+		    	ps.setString(4, lastName);
+		    	ps.execute();
+		    	return true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();			
+		}
+		return false;
 	}
 }

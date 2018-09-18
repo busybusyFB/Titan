@@ -1,10 +1,11 @@
+var user_id = 'New User';
+var user_fullname = 'New User';
+
 (function() {
 
     /**
      * Variables
      */
-    var user_id = '1111';
-    var user_fullname = 'John';
     var lng = -122.08;
     var lat = 37.38;
 
@@ -16,10 +17,10 @@
         $('nearby-btn').addEventListener('click', loadNearbyItems);
         $('fav-btn').addEventListener('click', loadFavoriteItems);
         $('recommend-btn').addEventListener('click', loadRecommendedItems);
-
         var welcomeMsg = $('welcome-msg');
-        welcomeMsg.innerHTML = 'Welcome, ' + user_fullname;
+        welcomeMsg.innerHTML = 'Welcome, ' + user_id;
         initGeoLocation();
+        
     }
 
     function initGeoLocation() {
@@ -181,7 +182,7 @@
 
     /**
      * API #1 Load the nearby items API end point: [GET]
-     * /Dashi/search?user_id=1111&lat=37.38&lon=-122.08
+     * /Titan/search?user_id=1111&lat=37.38&lon=-122.08
      */
     function loadNearbyItems() {
         console.log('loadNearbyItems');
@@ -257,10 +258,7 @@
         showLoadingMessage('Loading recommended items...');
 
         // make AJAX call
-        ajax(
-            'GET',
-            url + '?' + params,
-            req,
+        ajax('GET', url + '?' + params, req,
             // successful callback
             function(res) {
                 var items = JSON.parse(res);
@@ -433,7 +431,8 @@
 
         itemList.appendChild(li);
     }
-
+    
     init();
 
 })();
+	
