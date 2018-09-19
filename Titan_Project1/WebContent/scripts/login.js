@@ -10,6 +10,8 @@
 	var jumpToRegister = document.getElementById('jumpToRegister');
 	var jumpBackLogin = document.getElementById('jumpbackToLogin');
 	var jumpToGetpwd = document.getElementById('jumpToGetpwd');
+	var jumpBackLogin2 = document.getElementById('jumpbackToLogin02');
+	var cancelBtn = document.getElementById('cancel-btn');
 	
 	function init() {
 			//in login form
@@ -24,13 +26,17 @@
 			registerBtn.addEventListener('click', userRegister);
 			jumpBackLogin.addEventListener('click', showLoginForm);
 			//in getpwd form
-			
+			getpwdForm.addEventListener('click', hideGetpwdForm);
+			getpwdBtn.addEventListener('click', userGetpwd);
+			jumpBackLogin2.addEventListener('click', showLoginForm);
+			cancelBtn.addEventListener('click', hideGetpwdForm);
 	}
 
 	function showLoginForm() {
 		loginForm.style.display = "block";
 		registerForm.style.display = "none";
 		getpwdForm.style.display = "none";
+		hidewraningMsg()
 	}
 	function hideLoginForm() {
 		if (event.target == loginForm) {
@@ -67,13 +73,14 @@
     
     // Ajax: user login function
 	function userLogin() {
+		hidewraningMsg();
 		var username = document.getElementsByName("uname")[0].value;
 		var pwd = document.getElementsByName("psw")[0].value;
 		if (username.length == 0) {
-			//TO DO
+			document.getElementById("loginid").innerHTML = '  Cannot be empty!';
 			console.log("information not complete");
 		} else if (pwd.length == 0){
-			//TO DO
+			document.getElementById("loginpwd").innerHTML = '  Cannot be empty!';
 			console.log("information not complete");
 		} else {
 			console.log("information complete! " + username + " " + pwd);
@@ -89,10 +96,10 @@
 	                    	updateCurrentUser(username);
 	                    	loginForm.style.display = "none";
 	                    } else if (!result.hasUsrName) {
-	                        //TODO: show warning msg
+	                    	document.getElementById("loginid").innerHTML = '  This user does not exist, try again!';
 	                    	console.log("No such usr name.");
 	                    } else if (!result.isPwdCorrect) {
-	                    	//TODO: show warning msg
+	                    	document.getElementById("loginpwd").innerHTML = '  Wrong password, try again!';
 	                    	console.log("Wrong password.");
 	                    }
 	                },
@@ -117,6 +124,7 @@
 		loginForm.style.display = "none";
 		registerForm.style.display = "block";
 		getpwdForm.style.display = "none";
+		hidewraningMsg()
 	}
 	function hideRegisterForm() {
 		if (event.target == registerForm) {
@@ -125,6 +133,7 @@
 	}
 
 	function userRegister() {
+		hidewraningMsg();
 		var firstName = document.getElementsByName("registerfirstname")[0].value;
 		var lastName = document.getElementsByName("registerlastname")[0].value;
 		var userName = document.getElementsByName("registeruname")[0].value;
@@ -132,16 +141,16 @@
 		if (firstName.length == 0 || lastName.length == 0 || userName.length == 0 || pwd.length == 0) {
 			//TODO: give warning
 			if (firstName.length == 0) {
-				
+				document.getElementById("registerfirstnameLabel").innerHTML = '  Cannot be empty';
 			}
 			if (lastName.length == 0) {
-				
+				document.getElementById("registerlastnameLabel").innerHTML = '  Cannot be empty';
 			}
 			if (userName == 0) {
-				
+				document.getElementById("registeridLabel").innerHTML = '  Cannot be empty';
 			}
 			if (pwd == 0) {
-				
+				document.getElementById("registerpwdLabel").innerHTML = '  Cannot be empty';
 			}
 		} else {
 	        var url = './register';
@@ -157,6 +166,7 @@
 	            		console.log("Register success");
 	            	} else {
 	            		//warning message
+	            		document.getElementById("registeridLabel").innerHTML = '  Already used, try a new name';
 	            		console.log("Register failure");
 	            	}
 	            },
@@ -173,66 +183,23 @@
 		getpwdForm.style.display = "block";
 	}
 	
+	function hideGetpwdForm() {
+		if (event.target == getpwdForm || event.target == cancelBtn) {
+			getpwdForm.style.display = "none";
+		}
+	}
 	function userGetpwd() {
-		
+		//TODO
 	}
 	
-
-//	var signinBut = document.getElementById('signInBut');
-//	var getPwdBut = document.getElementById('getPwdBut');
-//	var backToLogin = document.getElementById('backToLogin');
-//	
-//	var jumpToLogin = document.getElementById('jumpToLogin');
-//	var loginBut = document.getElementById('loginBut');
-	// When the user clicks anywhere outside of the modal, close it
-//	window.onclick = function(event) {
-//		console.log(event.target.id);
-//
-//		//close the Log-in form
-//		if (event.target == login) {
-//			login.style.display = "none";
-//		}
-//		//Click sign-in-button, jump to register form
-//		if (event.target == signinBut) {
-//			login.style.display = "none";
-//			signin.style.display = "block";
-//		}
-//		//click forget-password button, jump to find password form
-//		if (event.target == getPwdBut) {
-//			
-//		}
-//		//close the register form
-//		if (event.target == signin) {
-//			signin.style.display = "none";
-//		}
-//		//click login button, jump back to log-in form
-//		if (event.target == backToLogin) {
-//			login.style.display = "block";
-//			signin.style.display = "none";			
-//		}
-//		
-//		if (event.target == getPwdBut) {
-//			login.style.display = "none";
-//			getpwd.style.display = "block";
-//		}
-//		
-//		if (event.target == getpwd) {
-//			getpwd.style.display = "none";
-//		}
-//		
-//		if (event.target == jumpToLogin) {
-//			getpwd.style.display = "none";
-//			login.style.display = "block";
-//		}
-//		
-//		if (event.target == loginBut) {
-//			console.log("tring to log in.");
-//			console.log("userid: ");
-//			console.log(document.getElementsByName("uname")[0].value);
-//			console.log(document.getElementsByName("psw")[0].value);
-//			console.log("pwd: ");
-//		}
-//	}
+	function hidewraningMsg() {
+		document.getElementById("loginid").innerHTML = null;
+		document.getElementById("loginpwd").innerHTML = null;
+		document.getElementById("registerfirstnameLabel").innerHTML = null;
+		document.getElementById("registerlastnameLabel").innerHTML = null;
+		document.getElementById("registeridLabel").innerHTML = null;
+		document.getElementById("registerpwdLabel").innerHTML = null;
+	}
 	
 	init();
 })();

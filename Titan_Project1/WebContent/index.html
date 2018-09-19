@@ -29,9 +29,9 @@
         </div>
 
         <div class="input-data">
-          <label for="uname"><b>Username</b></label>
+          <label for="uname"><b>Username</b><span class="warning-msg" id="loginid"></span></label>
           <input type="text" placeholder="Enter Username" name="uname" required>
-          <label for="psw"><b>Password</b></label>
+          <label for="psw"><b>Password</b><span class="warning-msg" id="loginpwd"></span></label>
           <input type="password" placeholder="Enter Password" name="psw" required>
           <button type="button" id="login-btn">Log In</button>
           <label>
@@ -68,7 +68,9 @@
         </div>
         
         <div class="form-footer">
-          <p><a href="#"id="jumpToLogin">Go back to login form.</a></p>
+          <button style="width: 20%;" type="button" id="cancel-btn">Cancel</button>
+          <span style="float: right;margin-top: 16px;"><a href="#"id="jumpbackToLogin02">Go back to login form.</a></span>
+          
         </div>
       </form>
     </div>
@@ -82,16 +84,16 @@
 
         <div class="input-data">
           <div>
-            <label for="firstname"><b>First Name</b></label>
+            <label for="firstname"><b>First Name</b><span class="warning-msg" id="registerfirstnameLabel"></span></label>
             <input type="text" placeholder="Enter First Name" name="registerfirstname" required>
           </div>
           <div>
-            <label for="lastname"><b>Last Name</b></label>
+            <label for="lastname"><b>Last Name</b><span class="warning-msg" id="registerlastnameLabel"></span></label>
             <input type="text" placeholder="Enter Last Name" name="registerlastname" required>
           </div>
-          <label for="uname"><b>Username</b></label>
+          <label for="uname"><b>Username</b><span class="warning-msg" id="registeridLabel"></span></label>
           <input type="text" placeholder="Enter Username" name="registeruname" required>
-          <label for="psw"><b>Password</b></label>
+          <label for="psw"><b>Password</b><span class="warning-msg" id="registerpwdLabel"></span></label>
           <input type="password" placeholder="Enter Password" name="registerpsw" required>
           <label>
             <input type="checkbox" checked="checked" name="remember"> I have read and agree to the Terms and Policies.

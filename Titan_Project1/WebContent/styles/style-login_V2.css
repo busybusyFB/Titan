@@ -69,11 +69,10 @@ input[type=text], input[type=password] {
 
 .modal .form-footer {
   padding-left: 16px;
-  margin-bottom: 15px;
-  height: 54px;
+  padding-right: 16px;
+  margin-bottom: 12px;
   background-color: #F2EBD9;
-  border-left: 0.5px solid #888;
-  border-right: 0.5px solid #888;
+
 }
 .modal .form-footer p {
   text-align: left;
@@ -108,4 +107,11 @@ input[type=text], input[type=password] {
     .cancelbtn {
        width: 100%;
     }
+}
+
+
+.warning-msg {
+	float: right;
+	color: red;
+	font-size: 1em;
 }

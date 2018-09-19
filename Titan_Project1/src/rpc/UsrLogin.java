@@ -19,6 +19,7 @@ public class UsrLogin extends HttpServlet {
     public UsrLogin() {
         super();
     }
+    
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String user_id = request.getParameter("user_id");
 		String password = request.getParameter("pwd");
